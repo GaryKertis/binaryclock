@@ -2,39 +2,64 @@
 #include <ctime>
 #include <iomanip>
 #include <time.h>
+#include <bitset>
+
+using namespace std;
 
 void binary(int number) {
 	int remainder;
 	int result;
 	if(number <= 1) {
-		std::cout << number << std::endl;
+		cout << number << endl;
 		return;
 	}
 
 	remainder = number%2;
 	binary(number >> 1);    
-	std::cout << remainder << std::endl;
+	cout << remainder << endl;
 }
 
-void getDigit(int number) {
-		do {
+string getBinary(int number) {
+	string result = bitset<4>(number).to_string();
+	return result;
+}
+
+string * getDigit(int number) {
+
+ 	static string arr[2];
+	int index = 0;
+
+	do {
+
     	int digit = number % 10;
-    	putchar('0' + digit);
+    	arr[index] = getBinary(digit);
     	number /= 10;
+    	index++;
 	} while (number > 0);
+
+	return arr;
+}
+
+void outPut(string *number) {
+	string first = *(number+1);
+	string second = *(number+0);
+	cout << first << " " << second;
 }
 
 int main()
 {
-	std::time_t result = std::time(nullptr);
-	int hour = std::localtime(&result)->tm_hour;
-	int min = std::localtime(&result)->tm_min;
-	int sec = std::localtime(&result)->tm_sec;
+	time_t result = time(nullptr);
+	int hour = localtime(&result)->tm_hour;
+	int min = localtime(&result)->tm_min;
+	int sec = localtime(&result)->tm_sec;
 
-	getDigit(hour);
+	outPut(getDigit(hour));
+	cout << " : ";
+	outPut(getDigit(min));
+	cout << " : ";
+	outPut(getDigit(sec));
+	cout << endl;
 
-	std::cout << min << std::endl;
-	std::cout << sec << std::endl;
 	return 0;
 }
 
